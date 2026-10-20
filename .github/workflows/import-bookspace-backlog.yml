@@ -1,0 +1,45 @@
+name: Import BookSpace Backlog
+on:
+  workflow_dispatch:
+permissions:
+  issues: write
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create 12 issues and labels (safe to rerun)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          BACKLOG_DATA: "eNrlXM1u20YQfhXCubSGE8Rx3aa5tT70FKCAW+RQ9+A6Qi00lQJbCRAUAQroBShRimhRDETLqR3HdZ5JeZJKO5zhcHeWPxIttO7FEbnk7s7PfvPL/PTHWqveelZbe+Ss/bh79/6m8+nPnjNtR9P26bQ9mba9abs3bY/UpT+7Pxsbq1tduFYDszvutH2p7rhrG87aL82nr+ZT3nEqmnSvsde4M5vtuHbk7LaaR6/2GuqJUL0Tqt+XtiWijdlIoAYn6sn5ghfqgf60/U6NzZ50HbXiSE3pqgd99ZzvqBdH6rqv3hur2Xw1fY/TMbsYTttnak8RDgw2HKRnAOvA6oH6+0G9EsL7ITwybV+rsQ5N7Km7H9XfvppgvuV7MWO+OTioPW/tNw5qzs5RvVU7qu/DyB1gyiWyI6bL2dxr3HXW17+rv6w1Hq2vOzjiWkTh4/2O4sUQuCJL1FGPz4g7V/Sc4XturpxjWruMzbOZ38x+34P9PjnE7QIHfbVIHwU3fxkuhmrMA4kvJT834f/sn7fIolA9yEZAQC7+INYQ26KYhh+IhoixAdRhPhEpZLwlUIY5TTlnSFTe6F62IjwwFCEAncW/uswFDgF/T4C5Dm4hUI+c44KpeUB10xK1KtOluuXjMekAtaBiLi0qn7x8aCkumAlyjfQ6cpDMgRJSqHYz0pVmdvUeNY84ERGjIvW3CwOk2kB1iFSiHGn8DN+NDxfQ8Li5u9N8Mqfi8YvjlnO4/7IGAwo1ne+b9UbreD68Bbdx9StFFRCdnGwXRTK/O3/r2/2D3541f91rzFH++VG9OQMbhfS0mhpQq8xub73ecDQL8yAxBjqLCWyBwEixbCialEVmKWpDCuHfYrYGIClv47ImJyhjwpBoY/o47VjdCh2lhbDYfBnNlsTWpnKLQhqaHF1XgRzQNYlft9ne4jBhtQiRUu8QDAEc1xEiAFnhEgDt43HpcYr66qkQ9/7G1JYeTuguAstAHqfNJyzl5juhFtiiq8qyuKsfq+J8c0ECLro8cCbmc16pXym4K4Cetxont2KEszqEEfeYRvhIX4TLJSar3vPusxXmoHSNiBcgY11DI2JWk3q7qH5hPlWugYwugvFYqZYP05Biu+izjjVJg/s4huNaIVBmGQMPfSkXh1NelEx+8TPexTcj7nJaOap55iVOvnyE+UKpQCdiyw/p7MYadYrY4aKKdHTQCJDUDotpkgdLo6/AkRSijbX9ywL7z8jlkhHV4+FeghIXGDmdI2N9NsktQuIvYvAcMOAAQDujUBPkDrCYEkwOMFc3983jtHBWS26bjgr4obFnNGC69hc4TgZie7hQF53zADZ142kRTnXiu/b5WT+hMFQLlWMsKsml4iDhMiOWOFOpHaeiBo3TS6OElTCy1iBBgAdYtw9j4FKe8tk83UuUF83gec7OwFv1SmO/oLOeYmAPFjvHjQyBAk6en6MlpRIhslHoYjwADO6WEuylehMElLAP9DEorLuSKawY/bdXgf7bJvpvC65zZkrWBPnSU1SP5YSf2lJhvohTu3aUHkMAfYJu1SkPcunQizjeZYEq5S61xPL8jAIJ73Apj86aNQi4Wffcir9ZUT956J6MC1mML4UL+alnLd0T50aK5ztGLA3dt85XIGb3Mve5kGvewwwXM7k+JvD6lG5LWK8uB8R5h2dL5GwuX4XMdUpbqaATYtIkMuRHWhJvKsDo9ppl6noIxcOsJIyMG4vXGAJ0bCJMrE8A/2Oy8+QdYHw1ppMqZMtviUn4MsbzAtnUQkHAcvPdvOOf2pecu43V4IolfRM3WCZFyle7zLycsqSlsQseBlSfuJZZpTv/Ywz06Sk4OT3xsJhuvezNFVaCqkP+ADEPgMaDZ4OcmqO4w8iMNbBCwT2EuD7nmWms+UhpO5AltbEuPGvx418tI56i7KD6/d/yMV/FcKkxPhUNTdDExaSZoLvILNVDbRdX56sZaBew+kaf++YCzBiwGqGlACIC3oBCrScjnodI8UCs4rsrB1srC2R7VAR/yWv+m1pCrJJfttND2I/DVvF4i0yZaGHI3y2NmPKuSGHcLOn0lKmeoCM9svi8S/i4Qc5prKZxg6b0biFUPszLPGhlCgEnS09RFCTh/ARoprTmHAqqs9MZfP0w1SslJy8yikvooWRUjow2DLEQJTZjiOcoD5EDriSraAAsIpDCiQ9Ly16cQcipAvbTwrE09nHzKLZ0pF1M6hDR0xkGjuTp0XuWlupYy7CpKjS1s5TuxssGUJuHW1ScPOMr1ihldC6MB8VhGhKKH5DvLq9ovEUbrTfu3YaEwtd2jM3W7aRz2kt7QuMMRL/J1VYB/tRNd8kwISzfTJAD9tgObu03MDAeaDnDzQdcWXmdBvYyNOuFPnoo0Q0VMH1rV55x6ktYA+rD6iM85+hStAgklwyVs7idI6tFktCyiuR0U8MTI3Y9WEYOWf16qZThsp4zlXDkXntR8qWxevew+eLZ09U51Wy9HLd6835m7gDIu0baRtxJkFt7DYyufIXqMxcBVjIgvxfmbMssVQTUC50q4AgJQhdzEz2pk2+seR591qCb1A1F79nX69grT2sUzl4kiCl8f2GAhqw2HjsnPZZAzBWDwxogOsl6BbC5qyIDl6cIUkUlq8qQ62zNPItf6rxJKr/LpkHEpENGdOPRJxzcspmkJcKINa5c67TM0Sw+Vg6826sBXtNR3tzM62POyFn6XKVcVgmGHyeSr3zTCxaF5aJfrwVsBx/p0bLNffnfHfq8Ahay45lynfWmqbesqRpeupAS1hfMlSJdlVo8xJ2est5uSE26q/ikJWLOFQUdSRrVrIaVKEKJUrX3/5lsrqLRz8dOvh6PWISQK6seZlUYsoaBVU9Kw7o8jXWHeg9bboRkFYtcNMzCgQpERFFESF8I0VnysFqelCdKWYSdHIPwsFqDsCPbg4emPcDPACnY0/pQOnge7WI3Mb+CSVfbwKdH+OeoBD3A3RMGiW7KA9MbhPVvaqkkGNk8b0pPgs/t04fsGdzzyauklAzL095ojjvrg3UdR1NsTHMxsWnZSmIUDSM1PkmXHSJ7a7aeByjU3ZfCHILAciADcr3SkjZ6p7Ns1myVSoktQiOa3oXCc3gXVMkWqCM8G6BQrk3XHbqU6FPMwaLthnd5GCN8wpBqjq6sA1xO8XBGpAKC5P+2qKApnDqzznDj77jvqWuw0dGvi5oCrDH93wEctUZoSzi1qW8IdNUuZdOeNBuf/jyB/LzzWeuwfuy06r/XPpct3GbFySbb6imDt7n1+ud/ADUkneE="
+        run: |
+          python3 - <<'PYTHON'
+          import os,json,zlib,base64,urllib.request,urllib.error,time
+          base='https://api.github.com/repos/'+os.environ['REPO']
+          token=os.environ['GH_TOKEN']
+          def api(path, method='GET', data=None):
+              payload=None if data is None else json.dumps(data,ensure_ascii=False).encode('utf-8')
+              req=urllib.request.Request(base+path,data=payload,method=method,headers={'Authorization':'Bearer '+token,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28','Content-Type':'application/json'})
+              with urllib.request.urlopen(req,timeout=30) as response:
+                  return json.load(response)
+          stories=json.loads(zlib.decompress(base64.b64decode(os.environ['BACKLOG_DATA'])))
+          existing=[]
+          page=1
+          while True:
+              chunk=api('/issues?state=all&per_page=100&page='+str(page))
+              existing.extend(x['title'] for x in chunk if 'pull_request' not in x)
+              if len(chunk)<100:break
+              page+=1
+          for s in stories:
+              if s['title'] in existing:
+                  print('Skipped existing:',s['title']);continue
+              priority=s['priority'].replace('’',"'")
+              labels=['MoSCoW: '+priority,'SP: '+str(s['points'])]
+              if priority=='Must have':labels.append('MVP')
+              for label in labels:
+                  try:api('/labels','POST',{'name':label,'color':'1D76DB' if label.startswith('SP:') else '0E8A16' if label=='MVP' else 'D4C5F9'})
+                  except urllib.error.HTTPError as e:
+                      if e.code!=422:raise
+              created=api('/issues','POST',{'title':s['title'],'body':s['body'],'labels':labels})
+              print('Created:',created['html_url'])
+          PYTHON
