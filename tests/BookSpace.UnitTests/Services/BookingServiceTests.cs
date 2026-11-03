@@ -115,6 +115,22 @@ public class BookingServiceTests
     }
 
     [Fact]
+    public async Task Book_FourthBookingSameDay_ExceedsDailyLimit()
+    {
+        // Arrange
+        var otherRoom = _rooms.Seed("ოთახი 204");
+        _bookings.Seed(StudentId, _room.Id, Tomorrow, 9);
+        _bookings.Seed(StudentId, _room.Id, Tomorrow, 10);
+        _bookings.Seed(StudentId, otherRoom.Id, Tomorrow, 11);
+
+        // Act
+        var result = await _sut.BookAsync(StudentId, _room.Id, Tomorrow, 12);
+
+        // Assert
+        Assert.Equal(ErrorCode.LimitExceeded, result.Error);
+    }
+
+    [Fact]
     public async Task Book_SameHourInAnotherRoom_ReturnsConflict()
     {
         // Arrange

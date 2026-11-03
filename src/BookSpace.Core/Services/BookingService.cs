@@ -12,6 +12,7 @@ public class BookingService
     private readonly IBookingRepository _bookings;
     private readonly IClock _clock;
     private readonly BookingRules _rules;
+    private readonly DailyLimitPolicy _dailyLimit;
 
     public BookingService(IRoomRepository rooms, IBookingRepository bookings, IClock clock, BookingRules rules)
     {
@@ -19,6 +20,7 @@ public class BookingService
         _bookings = bookings;
         _clock = clock;
         _rules = rules;
+        _dailyLimit = new DailyLimitPolicy(rules.MaxBookingsPerDay);
     }
 
     public async Task<Result<Booking>> BookAsync(int userId, int roomId, DateOnly date, int startHour,
@@ -61,6 +63,12 @@ public class BookingService
         if (userBookings.Any(b => b.IsActive && b.Date == date && b.StartHour == startHour))
         {
             return Result<Booking>.Fail(ErrorCode.Conflict, "ამ საათზე უკვე გაქვთ სხვა ჯავშანი.");
+        }
+
+        if (!_dailyLimit.CanBook(userBookings, date))
+        {
+            return Result<Booking>.Fail(ErrorCode.LimitExceeded,
+                $"ერთ დღეში მაქსიმუმ {_rules.MaxBookingsPerDay} ჯავშნის გაკეთება შეგიძლიათ.");
         }
 
         var booking = new Booking
