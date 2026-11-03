@@ -1,0 +1,57 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2027FC08-CC9F-48F5-BFDE-35C88170F6AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSpace.Core", "src\BookSpace.Core\BookSpace.Core.csproj", "{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSpace.Infrastructure", "src\BookSpace.Infrastructure\BookSpace.Infrastructure.csproj", "{28A08629-8996-4D64-8C99-124892521377}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSpace.Web", "src\BookSpace.Web\BookSpace.Web.csproj", "{87FB3811-C99E-47C2-8131-9691C8CE71BB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5C89A989-7DD4-4D25-BB42-8947DC123221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSpace.UnitTests", "tests\BookSpace.UnitTests\BookSpace.UnitTests.csproj", "{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookSpace.IntegrationTests", "tests\BookSpace.IntegrationTests\BookSpace.IntegrationTests.csproj", "{B722603F-726B-4376-AA99-CC531B9360A4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28A08629-8996-4D64-8C99-124892521377}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28A08629-8996-4D64-8C99-124892521377}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28A08629-8996-4D64-8C99-124892521377}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28A08629-8996-4D64-8C99-124892521377}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87FB3811-C99E-47C2-8131-9691C8CE71BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87FB3811-C99E-47C2-8131-9691C8CE71BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87FB3811-C99E-47C2-8131-9691C8CE71BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87FB3811-C99E-47C2-8131-9691C8CE71BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B722603F-726B-4376-AA99-CC531B9360A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B722603F-726B-4376-AA99-CC531B9360A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B722603F-726B-4376-AA99-CC531B9360A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B722603F-726B-4376-AA99-CC531B9360A4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8B4BB8A-2072-4083-A7DA-7683AFE9E82C} = {2027FC08-CC9F-48F5-BFDE-35C88170F6AA}
+		{28A08629-8996-4D64-8C99-124892521377} = {2027FC08-CC9F-48F5-BFDE-35C88170F6AA}
+		{87FB3811-C99E-47C2-8131-9691C8CE71BB} = {2027FC08-CC9F-48F5-BFDE-35C88170F6AA}
+		{3BDFF9E5-BCCC-46F6-90CB-B19A959A2FB4} = {5C89A989-7DD4-4D25-BB42-8947DC123221}
+		{B722603F-726B-4376-AA99-CC531B9360A4} = {5C89A989-7DD4-4D25-BB42-8947DC123221}
+	EndGlobalSection
+EndGlobal

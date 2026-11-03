@@ -1,0 +1,14 @@
+# ლოკალური MS SQL Server დეველოპმენტისთვის:  docker compose up -d
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "BookSpace_Dev_2026!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - bookspace-mssql:/var/opt/mssql
+
+volumes:
+  bookspace-mssql:
