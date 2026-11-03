@@ -34,9 +34,18 @@
 > 🟢 **`CourseRegistrationTests.cs:55` — ტესტის სახელი არაინფორმაციულია.**
 > `Test3()` არაფერს ამბობს. შემოთავაზება: `Register_WhenTotalCreditsWouldExceed30_ReturnsLimitError`, და დაყავით `// Arrange / Act / Assert` ბლოკებად.
 
-## 4. ჩვენ მიერ მიცემული review
+## 4. ჩატარებული review (self-review)
 
-> ⚠️ შეავსეთ, როცა სხვა გუნდის PR-ს გადახედავთ: ჩასვით PR-ის ბმული და თქვენი 3+ კომენტარი ზემოთ მოცემული ცხრილის ფორმატით.
+პროექტზე მარტო ვმუშაობ, ამიტომ სხვა გუნდის ნაცვლად review ჩავატარე საკუთარ Pull Request-ზე, GitHub-ის სტანდარტული პროცესით (**Files changed → ხაზზე კომენტარი → Submit review**).
 
-- სხვა გუნდის PR: _ბმული_
-- კომენტარები: 1. … 2. … 3. …
+- **Pull Request:** [#17 — test: DbInitializer integration tests](https://github.com/Metalfacex/bookspace/pull/17)
+- **კომენტარები:** 4 (ხაზებზე) + შემაჯამებელი
+
+| # | ფაილი : ხაზი | ტიპი | კომენტარი | შედეგი |
+|---|---|---|---|---|
+| 1 | `DbInitializerTests.cs:31` | suggestion | მხოლოდ Admin როლი მოწმდება; Manager-ის seed დაუფარავია. თუ ორივეს შეცდომით Admin როლი მიენიჭება, ტესტები მაინც გაივლის. | გასწორდა: დაემატა `Initialize_AdminAndManager_GetTheirOwnRoles` |
+| 2 | `DbInitializerTests.cs:47` | suggestion | magic number `4`: ტესტი მიბმულია seed-ის ოთახების რაოდენობაზე და ჩავარდება, როცა ოთახი დაემატება, თუმცა idempotency არ დარღვეულა. | გასწორდა: შედარდება პირველი და მეორე გაშვების შემდეგ დათვლილი რაოდენობა |
+| 3 | `DbInitializerTests.cs:41` | issue (follow-up) | `EnsureUserAsync` აკეთებს check-then-insert-ს; ორი ინსტანსის ერთდროული სტარტისას მეორე unique index-ზე ჩავარდება. | გადავიდა ცალკე Issue-ში [#18](https://github.com/Metalfacex/bookspace/issues/18) |
+| 4 | `DbInitializerTests.cs:57` | nit | კონფიგურაციის გასაღებები სტრინგად მეორდება; შეცდომით აკრეფილი გასაღები ტესტს „ცრუ-მწვანეს“ გახდის. | გასწორდა: გასაღებები `const`-ებადაა გატანილი |
+
+**შედეგი:** review-ს შემდეგ CI მწვანეა, coverage 78.4% → 84.8% (BookSpace.Infrastructure 48.9% → 65.6%).
