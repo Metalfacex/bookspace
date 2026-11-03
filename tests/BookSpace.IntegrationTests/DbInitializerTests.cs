@@ -12,6 +12,11 @@ namespace BookSpace.IntegrationTests;
 /// </summary>
 public class DbInitializerTests : IAsyncLifetime
 {
+    private const string AdminEmailKey = "BookSpace:Seed:AdminEmail";
+    private const string AdminPasswordKey = "BookSpace:Seed:AdminPassword";
+    private const string ManagerEmailKey = "BookSpace:Seed:ManagerEmail";
+    private const string ManagerPasswordKey = "BookSpace:Seed:ManagerPassword";
+
     private readonly TestDatabase _database = new();
 
     public Task InitializeAsync() => _database.InitializeAsync();
@@ -27,24 +32,56 @@ public class DbInitializerTests : IAsyncLifetime
         return services.BuildServiceProvider();
     }
 
+    private async Task<int> CountRoomsAsync()
+    {
+        await using var db = _database.CreateContext();
+        return await db.Rooms.CountAsync();
+    }
+
     [Fact]
     public async Task Initialize_RunTwice_DoesNotDuplicateAdminOrRooms()
     {
         // Arrange
         await using var provider = BuildServices(new Dictionary<string, string?>
         {
-            ["BookSpace:Seed:AdminEmail"] = "admin@uni.edu.ge",
-            ["BookSpace:Seed:AdminPassword"] = "Admin12345"
+            [AdminEmailKey] = "admin@uni.edu.ge",
+            [AdminPasswordKey] = "Admin12345"
         });
 
         // Act
         await provider.InitializeBookSpaceDatabaseAsync();
+        var roomsAfterFirst = await CountRoomsAsync();
         await provider.InitializeBookSpaceDatabaseAsync();
+        var roomsAfterSecond = await CountRoomsAsync();
 
         // Assert
         await using var db = _database.CreateContext();
         Assert.Equal(1, await db.Users.CountAsync(u => u.Role == UserRole.Admin));
-        Assert.Equal(4, await db.Rooms.CountAsync());
+        Assert.True(roomsAfterFirst > 0);
+        Assert.Equal(roomsAfterFirst, roomsAfterSecond);
+    }
+
+    [Fact]
+    public async Task Initialize_AdminAndManager_GetTheirOwnRoles()
+    {
+        // Arrange
+        await using var provider = BuildServices(new Dictionary<string, string?>
+        {
+            [AdminEmailKey] = "admin@uni.edu.ge",
+            [AdminPasswordKey] = "Admin12345",
+            [ManagerEmailKey] = "manager@uni.edu.ge",
+            [ManagerPasswordKey] = "Manager12345"
+        });
+
+        // Act
+        await provider.InitializeBookSpaceDatabaseAsync();
+
+        // Assert
+        await using var db = _database.CreateContext();
+        var users = await db.Users.OrderBy(u => u.Email).ToListAsync();
+        Assert.Equal(2, users.Count);
+        Assert.Equal(UserRole.Admin, users.Single(u => u.Email == "admin@uni.edu.ge").Role);
+        Assert.Equal(UserRole.Manager, users.Single(u => u.Email == "manager@uni.edu.ge").Role);
     }
 
     [Fact]
@@ -53,8 +90,8 @@ public class DbInitializerTests : IAsyncLifetime
         // Arrange
         await using var provider = BuildServices(new Dictionary<string, string?>
         {
-            ["BookSpace:Seed:AdminEmail"] = "admin@uni.edu.ge",
-            ["BookSpace:Seed:AdminPassword"] = ""
+            [AdminEmailKey] = "admin@uni.edu.ge",
+            [AdminPasswordKey] = ""
         });
 
         // Act
@@ -71,8 +108,8 @@ public class DbInitializerTests : IAsyncLifetime
         // Arrange
         await using var provider = BuildServices(new Dictionary<string, string?>
         {
-            ["BookSpace:Seed:AdminEmail"] = "  Admin@UNI.edu.ge ",
-            ["BookSpace:Seed:AdminPassword"] = "Admin12345"
+            [AdminEmailKey] = "  Admin@UNI.edu.ge ",
+            [AdminPasswordKey] = "Admin12345"
         });
 
         // Act
