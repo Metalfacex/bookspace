@@ -9,6 +9,8 @@
 | Product Backlog (GitHub Projects) | [github.com/users/Metalfacex/projects/5](https://github.com/users/Metalfacex/projects/5) |
 | არქიტექტურა (პრაქტიკული 2) | [docs/architecture.md](docs/architecture.md) |
 | ტესტ-სცენარები (პრაქტიკული 3) | [docs/testing/test-scenarios.md](docs/testing/test-scenarios.md) |
+| ტესტირების სტრატეგია (პირამიდა, QA/QC) | [docs/testing/test-strategy.md](docs/testing/test-strategy.md) |
+| API დოკუმენტაცია (Swagger) | გაშვებულ აპლიკაციაში: `/swagger` |
 | TDD ციკლი | [docs/testing/tdd-cycle.md](docs/testing/tdd-cycle.md) |
 | Coverage ანგარიში | [docs/testing/coverage.md](docs/testing/coverage.md) |
 | Code Review | [docs/testing/code-review.md](docs/testing/code-review.md) |
@@ -38,13 +40,32 @@ dotnet run --project src/BookSpace.Web --ConnectionStrings:DefaultConnection="Se
 ## ტესტები
 
 ```bash
-dotnet test                                   # unit + integration (ლოკალურად SQLite-ზე)
+dotnet test                                   # unit + integration + API (ლოკალურად SQLite-ზე)
 dotnet test --collect:"XPlat Code Coverage"   # coverage-ით
 ```
 
-Integration-ტესტები MS SQL Server-ზე რომ გაეშვას, მიუთითეთ გარემოს ცვლადი:
+| დონე | რაოდენობა | სად |
+|---|---:|---|
+| Unit | 85 | `tests/BookSpace.UnitTests` |
+| Integration (ბაზა) | 14 | `tests/BookSpace.IntegrationTests` |
+| API (HTTP) | 19 | `tests/BookSpace.ApiTests` |
+| End-to-End (ბრაუზერი) | 3 | `tests/BookSpace.E2ETests` |
+| დატვირთვა (k6) | 2 სცენარი | `load/rooms-load.js` |
+
+Integration- და API-ტესტები MS SQL Server-ზე რომ გაეშვას, მიუთითეთ გარემოს ცვლადი
 `BOOKSPACE_TEST_SQLSERVER="Server=localhost,1433;User Id=sa;Password=...;TrustServerCertificate=True"`.
-GitHub Actions-ში (`.github/workflows/ci.yml`) ეს ავტომატურად ხდება SQL Server 2022 კონტეინერით.
+GitHub Actions-ში (`.github/workflows/ci.yml`) ეს ავტომატურად ხდება SQL Server 2022 კონტეინერით; იქვე ეშვება ფორმატის შემოწმება, E2E და დატვირთვის ტესტი.
+
+**E2E ლოკალურად** (Windows PowerShell):
+
+```powershell
+dotnet run --project src/BookSpace.Web            # პირველ ფანჯარაში
+pwsh tests/BookSpace.E2ETests/bin/Debug/net8.0/playwright.ps1 install chromium   # ერთხელ
+$env:BOOKSPACE_E2E_URL = "http://localhost:5180"
+dotnet test tests/BookSpace.E2ETests              # მეორე ფანჯარაში
+```
+
+დეტალები: [docs/testing/test-strategy.md](docs/testing/test-strategy.md).
 
 ## პროექტის სტრუქტურა
 
@@ -56,6 +77,9 @@ src/
 tests/
   BookSpace.UnitTests/         xUnit, AAA, ფეიკ-რეპოზიტორიები
   BookSpace.IntegrationTests/  xUnit + რეალური ბაზა (SQL Server / SQLite)
+  BookSpace.ApiTests/          HTTP-ტესტები მთელ აპლიკაციაზე (WebApplicationFactory)
+  BookSpace.E2ETests/          Playwright, ბრაუზერში
+load/rooms-load.js           k6 დატვირთვის ტესტი (NFR-1, NFR-2)
 database/schema.sql          T-SQL სქემა
 docs/                        არქიტექტურა და ტესტირების დოკუმენტაცია
 ```
@@ -67,7 +91,7 @@ docs/                        არქიტექტურა და ტეს�
 | US-01 რეგისტრაცია, US-02 შესვლა | `AuthService`, `AccountController` |
 | US-03 ოთახების სია, US-08 დამატება, US-09 რედაქტირება | `RoomService`, `RoomsController` |
 | US-04 თავისუფალი დროები | `AvailabilityService`, `Rooms/Details` |
-| US-05 დაჯავშნა, US-06 ჩემი ჯავშნები, US-07 გაუქმება | `BookingService`, `BookingsController`, `/api/bookings` |
+| US-05 დაჯავშნა, US-06 ჩემი ჯავშნები, US-07 გაუქმება | `BookingService`, `BookingsController`, `/api/v1/bookings` |
 | US-10 შეხსენება ელფოსტით | `ReminderService` + `ReminderBackgroundService` (დეველოპმენტში წერილი ლოგში იწერება) |
 | US-11 სტატისტიკა | `StatisticsService`, `StatisticsController` |
 | US-12 განმეორებადი ჯავშნები (US-12.1–12.4) | Won't have (this time) — მომავლის იდეა, არ არის რეალიზებული |

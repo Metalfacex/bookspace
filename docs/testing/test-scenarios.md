@@ -26,5 +26,8 @@
 | TS-15 | დუბლირებული ელფოსტა | იგივე ელფოსტა სხვა რეგისტრით (`ANA@…`) | `409 Conflict` (ნორმალიზაციის შემდეგ) | — | `Register_EmailAlreadyUsed_ReturnsConflict`, `UniqueEmailIndex_BlocksDuplicateEvenWithoutServiceCheck` |
 | TS-16 | შეხსენება ზუსტად 1 საათით ადრე | ახლა 13:00, ჯავშანი 14:00 / 15:00 | 14:00 → 1 წერილი, 15:00 → ჯერ არა | ✅ | `ReminderServiceTests` |
 | TS-17 | სტატისტიკის პერიოდი | 366 / 367 დღე, from > to | 366 ✓, 367 ✗, from > to ✗ | ✅ | `StatisticsServiceTests.GetRoomUsage_PeriodLengthBoundary` |
-
-**სულ: 17 სცენარი, მათგან 12 — საზღვრის შემთხვევა.**
+| TS-18 | API დაცვა ავტორიზაციის გარეშე | `POST /api/v1/bookings` შესვლის გარეშე | `401` (არა redirect შესვლის გვერდზე) | — | `BookingsApiTests.CreateBooking_WithoutLogin_Returns401NotRedirect` |
+| TS-19 | Rate limiting | ლიმიტი 3/ფანჯარა, 4 მოთხოვნა ზედიზედ | 3 × `200`, მე-4 → `429` | ✅ | `RateLimitTests.FourthRequestInWindow_Returns429` |
+| TS-20 | CSRF დაცვა | ფორმის POST antiforgery ტოკენის გარეშე | `400`, ანგარიში არ იქმნება | — | `SecurityTests.FormPostWithoutAntiforgeryToken_IsRejected` |
+| TS-21 | სტუდენტის სრული სცენარი ბრაუზერში | რეგისტრაცია → ოთახი → ხვალ → დაჯავშნა → ჩემი ჯავშნები → გაუქმება | ყოველ ნაბიჯზე სწორი შეტყობინება, ბოლოს 0 მომავალი ჯავშანი | — | `UserJourneyTests.Student_RegistersBooksAndCancels` (E2E) |
+| TS-22 | დატვირთვა (NFR-1) | 50 ერთდროული მომხმარებელი, `/Rooms` | 95% ≤ 2 წამი | ✅ | `load/rooms-load.js` → `rooms_list` (k6) |
