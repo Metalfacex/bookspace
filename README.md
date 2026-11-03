@@ -70,7 +70,7 @@ docs/                        არქიტექტურა და ტეს�
 | US-05 დაჯავშნა, US-06 ჩემი ჯავშნები, US-07 გაუქმება | `BookingService`, `BookingsController`, `/api/bookings` |
 | US-10 შეხსენება ელფოსტით | `ReminderService` + `ReminderBackgroundService` (დეველოპმენტში წერილი ლოგში იწერება) |
 | US-11 სტატისტიკა | `StatisticsService`, `StatisticsController` |
-| US-12 განმეორებადი ჯავშნები | Won't have (this time) — არ არის რეალიზებული |
+| US-12 განმეორებადი ჯავშნები (US-12.1–12.4) | Won't have (this time) — მომავლის იდეა, არ არის რეალიზებული |
 
 ---
 
@@ -106,13 +106,13 @@ BookSpace არის ვებპლატფორმა, რომელი�
 **Must have (MVP):** US-01–US-08 = **30 SP**.
 **Should have:** US-09–US-10 = 8 SP.
 **Could have:** US-11 = 8 SP.
-**Won't have (this time):** US-12 = 13 SP.
+**Won't have (this time):** US-12 = 13 SP (დაშლილია US-12.1–US-12.4-ად, იხ. ქვემოთ „მომავლის იდეები“).
 **მთლიანი შეფასება:** 59 SP; მიმდინარე რელიზის კანდიდატები (Won't-ის გარეშე): 46 SP.
 
 MVP-ის დასრულებისას სტუდენტს შეუძლია რეგისტრაცია, შესვლა, ოთახების და ხელმისაწვდომი დროების ნახვა, ოთახის დაჯავშნა, საკუთარი ჯავშნების ნახვა და გაუქმება; ადმინისტრატორს შეუძლია ოთახის დამატება. ჯავშნის გადაფარვა უნდა იბლოკებოდეს სერვერზე, მათ შორის ერთდროული მოთხოვნების დროს.
 
 ## შეფასების წესი
-Story Points გამოყენებულია Fibonacci-ის სკალით (1, 2, 3, 5, 8, 13). შეფასებები არის ინდივიდუალური საწყისი ვარაუდები და არა რეალური გუნდური Planning Poker-ის შედეგები. US-12 (13 SP) გამოტოვებულია ამ რელიზიდან; მისი შემდგომი განხორციელებისას უნდა დაიშალოს უფრო პატარა Story-ებად.
+Story Points გამოყენებულია Fibonacci-ის სკალით (1, 2, 3, 5, 8, 13). შეფასებები არის ინდივიდუალური საწყისი ვარაუდები და არა რეალური გუნდური Planning Poker-ის შედეგები. US-12 (13 SP) ზედმეტად დიდია ერთი Sprint-ისთვის, ამიტომ დაიშალა ოთხ პატარა Story-ად (2–5 SP), რომლებიც GitHub-ზე US-12-ის sub-issue-ებია.
 
 ## GitHub Projects
 - დაფა: [github.com/users/Metalfacex/projects/5](https://github.com/users/Metalfacex/projects/5)
@@ -134,4 +134,16 @@ Story Points გამოყენებულია Fibonacci-ის სკა�
 | US-09 | ოთახის მონაცემების რედაქტირება | Should have | 3 |
 | US-10 | ჯავშნის შეხსენება ელფოსტით | Should have | 5 |
 | US-11 | ოთახების გამოყენების სტატისტიკა | Could have | 8 |
-| US-12 | განმეორებადი ჯავშნები | Won’t have (this time) | 13 |
+| US-12 | განმეორებადი ჯავშნები *(epic → US-12.1–12.4)* | Won’t have (this time) | 13 |
+
+## მომავლის იდეები (Won't have this time)
+
+US-12-ის დაშლა პატარა Story-ებად. ამ რელიზში არ კეთდება; თითოეულს GitHub Issue-ში აქვს Given/When/Then კრიტერიუმები.
+
+| ID | Story | MoSCoW | SP | Issue |
+|---|---|---|---:|---|
+| US-12.1 | ყოველკვირეული ჯავშნების სერიის შექმნა (მაქს. 8 კვირა) | Won't have | 5 | [#13](https://github.com/Metalfacex/bookspace/issues/13) |
+| US-12.2 | სერიის კონფლიქტების შემოწმება (ნაწილობრივი სერია არ იქმნება) | Won't have | 3 | [#14](https://github.com/Metalfacex/bookspace/issues/14) |
+| US-12.3 | სერიის ნახვა „ჩემს ჯავშნებში“ | Won't have | 2 | [#15](https://github.com/Metalfacex/bookspace/issues/15) |
+| US-12.4 | სერიის ან ერთი შემთხვევის გაუქმება | Won't have | 3 | [#16](https://github.com/Metalfacex/bookspace/issues/16) |
+| | **ჯამი** | | **13** | |
