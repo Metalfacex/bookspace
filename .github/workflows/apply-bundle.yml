@@ -1,0 +1,28 @@
+name: Apply code bundle
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Replay bundle commits onto a feature branch and push
+        run: |
+          git config user.name "Metalfacex"
+          git config user.email "giorgikhomeriki15@gmail.com"
+          git bundle verify _import/bookspace.bundle
+          git fetch _import/bookspace.bundle main:incoming
+          git checkout incoming
+          git rebase main
+          git rm -r -q _import
+          git commit -m "chore: remove import bundle"
+          git push origin incoming:feature/lecture-alignment
+          git log --oneline -5
