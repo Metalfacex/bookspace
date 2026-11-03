@@ -2,7 +2,7 @@
 @{
     var isAdmin = User.IsInRole(Roles.Admin);
 }
-<article class="book @(Model.IsActive ? "" : "inactive")">
+<article class="book @(Model.IsActive ? "" : "inactive")" data-testid="room-card">
     <a class="cover @RoomStyle.Cover(Model.Id)" asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Id"
        style="text-decoration:none" aria-label="@Model.Name — განრიგი">
         <div class="cover-top">

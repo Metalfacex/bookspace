@@ -68,7 +68,7 @@
 
                 @if (!signedIn)
                 {
-                    <div class="alert alert-info">@Icons.Lock(18) <span>დასაჯავშნად <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl">შედი სისტემაში</a> ან <a asp-controller="Account" asp-action="Register">შექმენი ანგარიში</a>.</span></div>
+                    <div class="alert alert-info" data-testid="login-to-book">@Icons.Lock(18) <span>დასაჯავშნად <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@returnUrl">შედი სისტემაში</a> ან <a asp-controller="Account" asp-action="Register">შექმენი ანგარიში</a>.</span></div>
                 }
 
                 <div class="slots">
@@ -95,7 +95,7 @@
                                     <input type="hidden" name="roomId" value="@Model.Room.Id" />
                                     <input type="hidden" name="date" value="@date.ToString("yyyy-MM-dd")" />
                                     <input type="hidden" name="startHour" value="@slot.StartHour" />
-                                    <button type="submit" class="btn btn-sm btn-block">დაჯავშნა</button>
+                                    <button type="submit" class="btn btn-sm btn-block" data-testid="book-slot">დაჯავშნა</button>
                                 </form>
                             }
                         </div>

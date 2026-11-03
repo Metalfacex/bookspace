@@ -35,7 +35,7 @@
                 <div class="tickets">
                     @foreach (var b in Model.Upcoming)
                     {
-                        <article class="ticket">
+                        <article class="ticket" data-testid="upcoming-booking">
                             <div class="ticket-date">
                                 <strong>@b.Date.Day</strong>
                                 <span>@RoomStyle.MonthShort(b.Date)</span>
@@ -53,7 +53,7 @@
                             </div>
                             <form asp-action="Cancel" asp-route-id="@b.Id" method="post"
                                   onsubmit="return confirm('ნამდვილად გსურთ ჯავშნის გაუქმება?');">
-                                <button type="submit" class="btn btn-sm btn-danger-outline">გაუქმება</button>
+                                <button type="submit" class="btn btn-sm btn-danger-outline" data-testid="cancel-booking">გაუქმება</button>
                             </form>
                         </article>
                     }
