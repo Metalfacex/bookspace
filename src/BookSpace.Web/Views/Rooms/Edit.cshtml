@@ -2,16 +2,40 @@
 @{
     ViewData["Title"] = "ოთახის რედაქტირება";
 }
-<div class="col-md-6">
-    <h1 class="h3 mb-3">ოთახის რედაქტირება</h1>
-    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
-        <input type="hidden" asp-for="Id" />
-        <partial name="_RoomForm" model="Model" />
-        <div class="form-check mb-3">
-            <input asp-for="IsActive" class="form-check-input" />
-            <label asp-for="IsActive" class="form-check-label"></label>
+<div class="page">
+    <div class="container" style="max-width:960px">
+        <a class="crumb" asp-action="Index">@Icons.ChevronLeft(16) ყველა ოთახი</a>
+        <div class="page-head">
+            <div>
+                <span class="eyebrow">ადმინისტრირება</span>
+                <h1>ოთახის რედაქტირება</h1>
+                <p>ცვლილება მაშინვე აისახება კატალოგში და განრიგში.</p>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">შენახვა</button>
-        <a asp-action="Index" class="btn btn-link">გაუქმება</a>
-    </form>
+        <div class="form-layout">
+            <div class="panel">
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post" novalidate>
+                    <input type="hidden" asp-for="Id" />
+                    <partial name="_RoomForm" model="Model" />
+                    <label class="check">
+                        <input asp-for="IsActive" />
+                        <span>აქტიურია (ჩანს სტუდენტებისთვის)</span>
+                    </label>
+                    <div class="form-actions">
+                        <button type="submit" class="btn">@Icons.Check() შენახვა</button>
+                        <a asp-action="Index" class="btn btn-ghost">გაუქმება</a>
+                    </div>
+                </form>
+            </div>
+            <aside>
+                <div class="cover @RoomStyle.Cover(Model.Id)">
+                    <div class="cover-top"><span class="cover-badge">@RoomStyle.Seats(Model.Capacity)</span></div>
+                    <div>
+                        <h3 class="cover-title">@Model.Name</h3>
+                        <div class="cover-rule"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
 </div>

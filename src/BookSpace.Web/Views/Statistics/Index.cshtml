@@ -2,40 +2,59 @@
 @{
     ViewData["Title"] = "სტატისტიკა";
     var max = Model.Usage.Count == 0 ? 0 : Model.Usage.Max(u => u.BookingCount);
+    var top = Model.Usage.FirstOrDefault(u => u.BookingCount > 0);
+    var days = Model.To.DayNumber - Model.From.DayNumber + 1;
 }
-<h1 class="h3 mb-3">ოთახების გამოყენება</h1>
+<div class="page">
+    <div class="container" style="max-width:960px">
+        <div class="page-head">
+            <div>
+                <span class="eyebrow">ანალიტიკა</span>
+                <h1>ოთახების გამოყენება</h1>
+                <p>რამდენჯერ დაიჯავშნა თითოეული ოთახი არჩეულ პერიოდში.</p>
+            </div>
+            <form method="get" class="date-nav" style="flex-wrap:wrap">
+                <label for="from" class="small muted">დან</label>
+                <input type="date" id="from" name="from" value="@Model.From.ToString("yyyy-MM-dd")" />
+                <label for="to" class="small muted">მდე</label>
+                <input type="date" id="to" name="to" value="@Model.To.ToString("yyyy-MM-dd")" />
+                <button type="submit" class="btn btn-sm">ჩვენება</button>
+            </form>
+        </div>
 
-<form method="get" class="row g-2 align-items-end mb-4">
-    <div class="col-auto">
-        <label class="form-label" for="from">დან</label>
-        <input type="date" id="from" name="from" class="form-control" value="@Model.From.ToString("yyyy-MM-dd")" />
-    </div>
-    <div class="col-auto">
-        <label class="form-label" for="to">მდე</label>
-        <input type="date" id="to" name="to" class="form-control" value="@Model.To.ToString("yyyy-MM-dd")" />
-    </div>
-    <div class="col-auto"><button type="submit" class="btn btn-outline-primary">ჩვენება</button></div>
-</form>
-
-@if (Model.Error is not null)
-{
-    <div class="alert alert-danger">@Model.Error</div>
-}
-else
-{
-    <p>სულ ჯავშნები პერიოდში: <strong>@Model.Total</strong></p>
-    <table class="table">
-        <thead><tr><th>ოთახი</th><th class="text-end">ჯავშნები</th><th style="width:40%"></th></tr></thead>
-        <tbody>
-        @foreach (var u in Model.Usage)
+        @if (Model.Error is not null)
         {
-            var pct = max == 0 ? 0 : (int)Math.Round(100.0 * u.BookingCount / max);
-            <tr>
-                <td>@u.RoomName</td>
-                <td class="text-end">@u.BookingCount</td>
-                <td><div class="progress" role="progressbar"><div class="progress-bar" style="width:@(pct)%"></div></div></td>
-            </tr>
+            <div class="alert alert-error">@Icons.Alert(18) <span>@Model.Error</span></div>
         }
-        </tbody>
-    </table>
-}
+        else
+        {
+            <div class="stat-cards">
+                <div class="stat-card"><span>ჯავშნები პერიოდში</span><strong>@Model.Total</strong></div>
+                <div class="stat-card"><span>საშუალოდ დღეში</span><strong>@((days > 0 ? (double)Model.Total / days : 0).ToString("0.0"))</strong></div>
+                <div class="stat-card"><span>ყველაზე მოთხოვნადი</span><strong style="font-size:1.25rem;margin-top:10px">@(top?.RoomName ?? "—")</strong></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-head"><h2>ოთახების მიხედვით</h2></div>
+                @if (Model.Usage.Count == 0)
+                {
+                    <p class="muted">ოთახები არ არის.</p>
+                }
+                else
+                {
+                    <div class="usage">
+                        @foreach (var u in Model.Usage)
+                        {
+                            var pct = max == 0 ? 0 : (int)Math.Round(100.0 * u.BookingCount / max);
+                            <div class="usage-row">
+                                <span>@u.RoomName</span>
+                                <div class="usage-bar" role="img" aria-label="@u.BookingCount ჯავშანი"><i style="width:@(pct)%"></i></div>
+                                <b>@u.BookingCount</b>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>

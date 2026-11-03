@@ -2,9 +2,17 @@
 @{
     ViewData["Title"] = "შეცდომა";
 }
-<h1 class="text-danger">შეცდომა</h1>
-<p>მოთხოვნის დამუშავებისას მოხდა შეცდომა.</p>
-@if (Model.ShowRequestId)
-{
-    <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
-}
+<div class="page">
+    <div class="container" style="max-width:640px">
+        <div class="empty">
+            <div class="empty-icon">@Icons.Alert(28)</div>
+            <h3>რაღაც არასწორად წავიდა</h3>
+            <p>მოთხოვნის დამუშავებისას მოხდა შეცდომა. სცადე თავიდან.</p>
+            @if (Model.ShowRequestId)
+            {
+                <p class="small muted">Request ID: <code>@Model.RequestId</code></p>
+            }
+            <a class="btn" asp-controller="Home" asp-action="Index">მთავარზე დაბრუნება</a>
+        </div>
+    </div>
+</div>

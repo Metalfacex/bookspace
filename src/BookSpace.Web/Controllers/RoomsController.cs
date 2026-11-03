@@ -4,6 +4,7 @@ using BookSpace.Core.Rules;
 using BookSpace.Core.Services;
 using BookSpace.Web.Auth;
 using BookSpace.Web.Models;
+using BookSpace.Web.Ui;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,14 +25,29 @@ public class RoomsController : Controller
         _rules = rules;
     }
 
-    // US-03
+    // US-03 (+ ძებნა და ფილტრი ზომით)
     [HttpGet]
-    public async Task<IActionResult> Index(CancellationToken ct)
+    public async Task<IActionResult> Index(string? q, string? size, CancellationToken ct)
     {
-        var rooms = User.IsInRole(Roles.Admin)
+        var all = User.IsInRole(Roles.Admin)
             ? await _rooms.GetAllRoomsAsync(ct)
             : await _rooms.GetActiveRoomsAsync(ct);
-        return View(rooms);
+
+        var query = q?.Trim();
+        var filtered = all
+            .Where(r => string.IsNullOrEmpty(query)
+                        || r.Name.Contains(query, StringComparison.OrdinalIgnoreCase)
+                        || r.Location.Contains(query, StringComparison.OrdinalIgnoreCase))
+            .Where(r => RoomStyle.MatchesSize(r, size))
+            .ToList();
+
+        return View(new RoomListViewModel
+        {
+            Rooms = filtered,
+            TotalCount = all.Count,
+            Query = query,
+            Size = size
+        });
     }
 
     // US-04

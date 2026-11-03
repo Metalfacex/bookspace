@@ -1,12 +1,134 @@
+@model HomeViewModel
 @{
     ViewData["Title"] = "მთავარი";
+    var shelfRooms = Model.Rooms.Take(7).ToList();
+    int[] heights = { 92, 78, 100, 70, 88, 96, 74 };
 }
-<div class="p-5 mb-4 bg-light rounded-3">
-    <h1 class="display-5 fw-bold">იპოვე თავისუფალი სასწავლო ოთახი</h1>
-    <p class="fs-5 col-md-8">BookSpace აჩვენებს უნივერსიტეტის სასწავლო ოთახების ხელმისაწვდომობას და გაძლევს საშუალებას, ოთახი წინასწარ დაჯავშნო — გადაფარვის გარეშე.</p>
-    <a class="btn btn-primary btn-lg" asp-controller="Rooms" asp-action="Index">ოთახების ნახვა</a>
-    @if (User.Identity?.IsAuthenticated != true)
-    {
-        <a class="btn btn-outline-primary btn-lg ms-2" asp-controller="Account" asp-action="Register">რეგისტრაცია</a>
-    }
-</div>
+<section class="hero">
+    <div class="container hero-grid">
+        <div>
+            <span class="eyebrow">უნივერსიტეტის სასწავლო ოთახები</span>
+            <h1>იპოვე შენი <span class="underline">წყნარი კუთხე</span> მეცადინეობისთვის</h1>
+            <p class="hero-lead">დაათვალიერე ოთახები, ნახე თავისუფალი საათები და დაჯავშნე რამდენიმე წამში — ისე, როგორც ბიბლიოთეკაში წიგნს აიღებდი.</p>
+
+            <form class="hero-search" method="get" asp-controller="Rooms" asp-action="Index" role="search">
+                <label class="field" for="hero-q">
+                    @Icons.Search(20)
+                    <span class="visually-hidden">ოთახის ძებნა</span>
+                    <input id="hero-q" name="q" type="search" placeholder="ოთახი, კორპუსი ან სართული…" />
+                </label>
+                <button class="btn btn-lg" type="submit">ძებნა</button>
+            </form>
+
+            <div class="chips" aria-label="სწრაფი ფილტრები">
+                <a class="chip" asp-controller="Rooms" asp-action="Index" asp-route-size="solo">@Icons.Quiet(14) ინდივიდუალური</a>
+                <a class="chip" asp-controller="Rooms" asp-action="Index" asp-route-size="small">@Icons.Users(14) მცირე ჯგუფი</a>
+                <a class="chip" asp-controller="Rooms" asp-action="Index" asp-route-size="group">@Icons.Users(14) ჯგუფური</a>
+                <a class="chip" asp-controller="Rooms" asp-action="Index" asp-route-q="ბიბლიოთეკა">@Icons.Book(14) ბიბლიოთეკა</a>
+            </div>
+
+            <div class="hero-stats">
+                <div><strong>@Model.RoomCount</strong><span>ოთახი</span></div>
+                <div><strong>@Model.TotalSeats</strong><span>ადგილი</span></div>
+                <div><strong>14</strong><span>საათი დღეში</span></div>
+            </div>
+        </div>
+
+        <div class="shelf" aria-label="ოთახების თარო">
+            <div class="shelf-title">
+                <h3>ახლა თაროზე</h3>
+                <a class="small" asp-controller="Rooms" asp-action="Index">ყველა @Icons.ArrowRight(13)</a>
+            </div>
+            <div class="shelf-row">
+                @for (var i = 0; i < shelfRooms.Count; i++)
+                {
+                    var r = shelfRooms[i];
+                    <a class="spine @RoomStyle.Cover(r.Id)"
+                       style="height:@(heights[i % heights.Length])%"
+                       asp-controller="Rooms" asp-action="Details" asp-route-id="@r.Id"
+                       title="@r.Name">
+                        <span>@r.Name</span>
+                        <small>@r.Capacity</small>
+                    </a>
+                }
+                @if (shelfRooms.Count == 0)
+                {
+                    <span class="muted small" style="align-self:center;margin:auto">თარო ჯერ ცარიელია</span>
+                }
+            </div>
+            <p class="shelf-caption">დააჭირე „წიგნს“, რომ ნახო დღევანდელი განრიგი.</p>
+        </div>
+    </div>
+</section>
+
+@if (Model.Rooms.Count > 0)
+{
+    <section class="section">
+        <div class="container">
+            <div class="section-head">
+                <div>
+                    <span class="eyebrow">რჩეული</span>
+                    <h2>პოპულარული ოთახები</h2>
+                </div>
+                <a asp-controller="Rooms" asp-action="Index">მთელი კატალოგი @Icons.ArrowRight(14)</a>
+            </div>
+            <div class="book-grid">
+                @foreach (var room in Model.Rooms.Take(4))
+                {
+                    <partial name="_RoomCard" model="room" />
+                }
+            </div>
+        </div>
+    </section>
+}
+
+<section class="section section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div>
+                <span class="eyebrow">როგორ მუშაობს</span>
+                <h2>სამი ნაბიჯი მშვიდ საათამდე</h2>
+            </div>
+        </div>
+        <div class="steps">
+            <div class="step">
+                <h3>აირჩიე ოთახი</h3>
+                <p>მოძებნე სახელით ან კორპუსით და გაფილტრე ზომით — ინდივიდუალური კაბინიდან ჯგუფურ დარბაზამდე.</p>
+            </div>
+            <div class="step">
+                <h3>ნახე თავისუფალი საათები</h3>
+                <p>განრიგი ერთ ეკრანზეა: მწვანე — თავისუფალი, ტერაკოტა — დაკავებული. 14 დღით წინ.</p>
+            </div>
+            <div class="step">
+                <h3>დაჯავშნე ერთი დაჭერით</h3>
+                <p>ჯავშანი მაშინვე ჩანს „ჩემს ჯავშნებში“, საჭიროებისას — გააუქმე დაწყებამდე.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="info-band">
+            <div><strong>08:00–22:00</strong><span>სამუშაო საათები</span></div>
+            <div><strong>1 საათი</strong><span>ერთი სლოტის ხანგრძლივობა</span></div>
+            <div><strong>3 / დღე</strong><span>მაქსიმუმ ჯავშანი სტუდენტზე</span></div>
+            <div><strong>14 დღე</strong><span>რამდენი ხნით ადრე</span></div>
+        </div>
+    </div>
+</section>
+
+@if (User.Identity?.IsAuthenticated != true)
+{
+    <section class="section" style="padding-top:0">
+        <div class="container">
+            <div class="cta">
+                <div>
+                    <h2>შექმენი ანგარიში უნივერსიტეტის ელფოსტით</h2>
+                    <p>რეგისტრაციას ერთი წუთი სჭირდება — @@…edu.ge მისამართით.</p>
+                </div>
+                <a class="btn btn-lg btn-clay" asp-controller="Account" asp-action="Register">დაწყება @Icons.ArrowRight()</a>
+            </div>
+        </div>
+    </section>
+}

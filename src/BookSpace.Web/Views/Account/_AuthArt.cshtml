@@ -1,0 +1,16 @@
+@model (string Title, string Text)
+<div class="auth-art">
+    <a class="brand" asp-controller="Home" asp-action="Index" style="color:#fffdf8">
+        <span class="brand-mark" style="background:#fffdf8;color:var(--accent)">@Icons.Book(20)</span>
+        <span>Book<em style="color:var(--gold)">Space</em></span>
+    </a>
+    <div>
+        <div class="mini-shelf" aria-hidden="true">
+            <i style="height:70%"></i><i style="height:92%"></i><i style="height:60%"></i><i style="height:84%"></i>
+            <i style="height:100%"></i><i style="height:66%"></i><i style="height:78%"></i><i style="height:88%"></i>
+        </div>
+        <h2>@Model.Title</h2>
+        <p>@Model.Text</p>
+    </div>
+    <p class="auth-quote">ყველაზე კარგი სამეცადინო ადგილი ის არის, რომელიც წინასწარ დაჯავშნე.</p>
+</div>

@@ -2,62 +2,91 @@
 @{
     ViewData["Title"] = "ჩემი ჯავშნები";
 }
-<h1 class="h3 mb-3">ჩემი ჯავშნები</h1>
+<div class="page">
+    <div class="container" style="max-width:900px">
+        <partial name="_Alerts" />
+        <div class="page-head">
+            <div>
+                <span class="eyebrow">ჩემი თარო</span>
+                <h1>ჩემი ჯავშნები</h1>
+                <p>მომავალი ჯავშნები და ისტორია ერთ ადგილას.</p>
+            </div>
+            <a class="btn btn-ghost" asp-controller="Rooms" asp-action="Index">@Icons.Plus() ახალი ჯავშანი</a>
+        </div>
 
-@if (Model.IsEmpty)
-{
-    <div class="alert alert-info" data-testid="no-bookings">ჯავშნები ჯერ არ გაქვთ. <a asp-controller="Rooms" asp-action="Index">აირჩიეთ ოთახი</a>.</div>
-}
-else
-{
-    <h2 class="h5">მომავალი</h2>
-    @if (Model.Upcoming.Count == 0)
-    {
-        <p class="text-muted">მომავალი ჯავშნები არ გაქვთ.</p>
-    }
-    else
-    {
-        <table class="table align-middle">
-            <thead><tr><th>თარიღი</th><th>დრო</th><th>ოთახი</th><th></th></tr></thead>
-            <tbody>
-            @foreach (var b in Model.Upcoming)
+        @if (Model.IsEmpty)
+        {
+            <div class="empty" data-testid="no-bookings">
+                <div class="empty-icon">@Icons.Bookmark(28)</div>
+                <h3>ჯავშნები ჯერ არ გაქვს</h3>
+                <p>აირჩიე ოთახი კატალოგიდან და დაჯავშნე პირველი საათი.</p>
+                <a class="btn" asp-controller="Rooms" asp-action="Index">ოთახების ნახვა @Icons.ArrowRight()</a>
+            </div>
+        }
+        else
+        {
+            <h2 class="tabs-title">მომავალი <span class="count-pill">@Model.Upcoming.Count</span></h2>
+            @if (Model.Upcoming.Count == 0)
             {
-                <tr>
-                    <td>@b.Date.ToString("dd.MM.yyyy")</td>
-                    <td>@($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</td>
-                    <td>@(b.Room?.Name ?? $"#{b.RoomId}")</td>
-                    <td class="text-end">
-                        <form asp-action="Cancel" asp-route-id="@b.Id" method="post"
-                              onsubmit="return confirm('ნამდვილად გსურთ ჯავშნის გაუქმება?');">
-                            <button type="submit" class="btn btn-outline-danger btn-sm">გაუქმება</button>
-                        </form>
-                    </td>
-                </tr>
+                <p class="muted" style="margin-bottom:40px">მომავალი ჯავშნები არ გაქვს.</p>
             }
-            </tbody>
-        </table>
-    }
+            else
+            {
+                <div class="tickets">
+                    @foreach (var b in Model.Upcoming)
+                    {
+                        <article class="ticket">
+                            <div class="ticket-date">
+                                <strong>@b.Date.Day</strong>
+                                <span>@RoomStyle.MonthShort(b.Date)</span>
+                            </div>
+                            <div>
+                                <h3>@(b.Room?.Name ?? $"ოთახი #{b.RoomId}")</h3>
+                                <div class="meta">
+                                    <span>@Icons.Clock(15) @($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</span>
+                                    <span>@Icons.Calendar(15) @RoomStyle.Weekday(b.Date)</span>
+                                    @if (b.Room is not null)
+                                    {
+                                        <span>@Icons.Pin(15) @b.Room.Location</span>
+                                    }
+                                </div>
+                            </div>
+                            <form asp-action="Cancel" asp-route-id="@b.Id" method="post"
+                                  onsubmit="return confirm('ნამდვილად გსურთ ჯავშნის გაუქმება?');">
+                                <button type="submit" class="btn btn-sm btn-danger-outline">გაუქმება</button>
+                            </form>
+                        </article>
+                    }
+                </div>
+            }
 
-    <h2 class="h5 mt-4">ისტორია</h2>
-    @if (Model.History.Count == 0)
-    {
-        <p class="text-muted">ისტორია ცარიელია.</p>
-    }
-    else
-    {
-        <table class="table table-sm text-muted">
-            <thead><tr><th>თარიღი</th><th>დრო</th><th>ოთახი</th><th>სტატუსი</th></tr></thead>
-            <tbody>
-            @foreach (var b in Model.History)
+            <h2 class="tabs-title">ისტორია <span class="count-pill" style="background:var(--paper-deep);color:var(--ink-soft)">@Model.History.Count</span></h2>
+            @if (Model.History.Count == 0)
             {
-                <tr>
-                    <td>@b.Date.ToString("dd.MM.yyyy")</td>
-                    <td>@($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</td>
-                    <td>@(b.Room?.Name ?? $"#{b.RoomId}")</td>
-                    <td>@(b.Status == BookingStatus.Cancelled ? "გაუქმებული" : "დასრულებული")</td>
-                </tr>
+                <p class="muted">ისტორია ცარიელია.</p>
             }
-            </tbody>
-        </table>
-    }
-}
+            else
+            {
+                <div class="tickets">
+                    @foreach (var b in Model.History)
+                    {
+                        var cancelled = b.Status == BookingStatus.Cancelled;
+                        <article class="ticket @(cancelled ? "cancelled" : "past")">
+                            <div class="ticket-date">
+                                <strong>@b.Date.Day</strong>
+                                <span>@RoomStyle.MonthShort(b.Date)</span>
+                            </div>
+                            <div>
+                                <h3>@(b.Room?.Name ?? $"ოთახი #{b.RoomId}")</h3>
+                                <div class="meta">
+                                    <span>@Icons.Clock(15) @($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</span>
+                                </div>
+                            </div>
+                            <span class="status @(cancelled ? "status-cancelled" : "status-done")">@(cancelled ? "გაუქმებული" : "დასრულებული")</span>
+                        </article>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
