@@ -2,11 +2,35 @@
 @{
     ViewData["Title"] = "ოთახის დამატება";
 }
-<div class="col-md-6">
-    <h1 class="h3 mb-3">ოთახის დამატება</h1>
-    <form asp-action="Create" method="post">
-        <partial name="_RoomForm" model="Model" />
-        <button type="submit" class="btn btn-success">შენახვა</button>
-        <a asp-action="Index" class="btn btn-link">გაუქმება</a>
-    </form>
+<div class="page">
+    <div class="container" style="max-width:960px">
+        <a class="crumb" asp-action="Index">@Icons.ChevronLeft(16) ყველა ოთახი</a>
+        <div class="page-head">
+            <div>
+                <span class="eyebrow">ადმინისტრირება</span>
+                <h1>ახალი ოთახი თაროზე</h1>
+                <p>შეავსე ველები — ოთახი მაშინვე გამოჩნდება კატალოგში.</p>
+            </div>
+        </div>
+        <div class="form-layout">
+            <div class="panel">
+                <form asp-action="Create" method="post" novalidate>
+                    <partial name="_RoomForm" model="Model" />
+                    <div class="form-actions">
+                        <button type="submit" class="btn">@Icons.Check() შენახვა</button>
+                        <a asp-action="Index" class="btn btn-ghost">გაუქმება</a>
+                    </div>
+                </form>
+            </div>
+            <aside>
+                <div class="cover cover-0">
+                    <div class="cover-top"><span class="cover-badge">ახალი</span></div>
+                    <div>
+                        <h3 class="cover-title">ასე გამოჩნდება ოთახი კატალოგში</h3>
+                        <div class="cover-rule"></div>
+                    </div>
+                </div>
+            </aside>
+        </div>
+    </div>
 </div>

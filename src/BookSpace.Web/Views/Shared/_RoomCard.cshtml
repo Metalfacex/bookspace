@@ -1,0 +1,38 @@
+@model Room
+@{
+    var isAdmin = User.IsInRole(Roles.Admin);
+}
+<article class="book @(Model.IsActive ? "" : "inactive")">
+    <a class="cover @RoomStyle.Cover(Model.Id)" asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Id"
+       style="text-decoration:none" aria-label="@Model.Name — განრიგი">
+        <div class="cover-top">
+            <span class="cover-badge">@Icons.Users(13) @RoomStyle.Seats(Model.Capacity)</span>
+        </div>
+        <div>
+            <h3 class="cover-title">@Model.Name</h3>
+            <div class="cover-rule"></div>
+        </div>
+    </a>
+    <div class="book-body">
+        <div class="meta">
+            <span>@Icons.Pin(15) @Model.Location</span>
+        </div>
+        <div>
+            <span class="tag">@RoomStyle.SizeLabel(Model.Capacity)</span>
+            @if (!Model.IsActive)
+            {
+                <span class="tag tag-off">დახურულია</span>
+            }
+        </div>
+        <div class="book-actions">
+            @if (Model.IsActive)
+            {
+                <a class="btn btn-sm" asp-controller="Rooms" asp-action="Details" asp-route-id="@Model.Id">განრიგი @Icons.ArrowRight(14)</a>
+            }
+            @if (isAdmin)
+            {
+                <a class="btn btn-sm btn-ghost btn-icon" asp-controller="Rooms" asp-action="Edit" asp-route-id="@Model.Id" title="რედაქტირება" aria-label="@Model.Name — რედაქტირება">@Icons.Edit(15)</a>
+            }
+        </div>
+    </div>
+</article>

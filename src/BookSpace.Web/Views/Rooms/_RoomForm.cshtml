@@ -1,15 +1,17 @@
 @model RoomFormViewModel
-<div asp-validation-summary="All" class="text-danger mb-2"></div>
-<div class="mb-3">
+<div asp-validation-summary="All"></div>
+<div class="form-field">
     <label asp-for="Name" class="form-label"></label>
-    <input asp-for="Name" class="form-control" />
+    <input asp-for="Name" class="form-control" placeholder="მაგ. ოთახი 305" />
+    <span asp-validation-for="Name"></span>
 </div>
-<div class="mb-3">
+<div class="form-field">
     <label asp-for="Location" class="form-label"></label>
-    <input asp-for="Location" class="form-control" />
+    <input asp-for="Location" class="form-control" placeholder="მაგ. II კორპუსი, 3 სართული" />
+    <span asp-validation-for="Location"></span>
 </div>
-<div class="mb-3">
+<div class="form-field">
     <label asp-for="Capacity" class="form-label"></label>
-    <input asp-for="Capacity" class="form-control" type="number" min="1" max="100" />
-    <div class="form-text">1-დან 100-მდე.</div>
+    <input asp-for="Capacity" class="form-control" type="number" min="1" max="100" style="max-width:160px" />
+    <div class="form-hint">1-დან 100-მდე ადამიანი.</div>
 </div>

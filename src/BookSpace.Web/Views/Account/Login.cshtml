@@ -2,24 +2,28 @@
 @{
     ViewData["Title"] = "შესვლა";
 }
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <h1 class="h3 mb-3">შესვლა</h1>
-        <form asp-action="Login" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-2"></div>
-            <input type="hidden" asp-for="ReturnUrl" />
-            <div class="mb-3">
-                <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control" type="email" autocomplete="username" />
-                <span asp-validation-for="Email" class="text-danger small"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" autocomplete="current-password" />
-                <span asp-validation-for="Password" class="text-danger small"></span>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">შესვლა</button>
-        </form>
-        <p class="mt-3 small">არ გაქვთ ანგარიში? <a asp-action="Register">დარეგისტრირდით</a></p>
+<div class="container">
+    <div class="auth">
+        <partial name="_AuthArt" model="@(("კეთილი იყოს შენი დაბრუნება", "შედი და გააგრძელე იქიდან, სადაც გაჩერდი — შენი ჯავშნები უკვე თაროზეა."))" />
+        <div class="auth-form">
+            <h1>შესვლა</h1>
+            <p class="lead">გამოიყენე უნივერსიტეტის ელფოსტა.</p>
+            <form asp-action="Login" method="post" novalidate>
+                <div asp-validation-summary="ModelOnly"></div>
+                <input type="hidden" asp-for="ReturnUrl" />
+                <div class="form-field">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" type="email" autocomplete="username" placeholder="name@uni.edu.ge" />
+                    <span asp-validation-for="Email"></span>
+                </div>
+                <div class="form-field">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" autocomplete="current-password" />
+                    <span asp-validation-for="Password"></span>
+                </div>
+                <button type="submit" class="btn btn-lg btn-block">შესვლა</button>
+            </form>
+            <p class="form-foot">არ გაქვს ანგარიში? <a asp-action="Register">დარეგისტრირდი</a></p>
+        </div>
     </div>
 </div>

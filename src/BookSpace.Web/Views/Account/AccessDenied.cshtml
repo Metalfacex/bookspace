@@ -1,6 +1,13 @@
 @{
     ViewData["Title"] = "წვდომა აკრძალულია";
 }
-<h1 class="h3 text-danger">წვდომა აკრძალულია</h1>
-<p>ამ მოქმედების შესასრულებლად საჭირო როლი არ გაქვთ.</p>
-<a asp-controller="Rooms" asp-action="Index">ოთახებზე დაბრუნება</a>
+<div class="page">
+    <div class="container" style="max-width:640px">
+        <div class="empty">
+            <div class="empty-icon">@Icons.Lock(28)</div>
+            <h3>ეს თარო შენთვის დაკეტილია</h3>
+            <p>ამ გვერდის სანახავად საჭირო როლი არ გაქვს.</p>
+            <a class="btn" asp-controller="Rooms" asp-action="Index">ოთახებზე დაბრუნება</a>
+        </div>
+    </div>
+</div>
