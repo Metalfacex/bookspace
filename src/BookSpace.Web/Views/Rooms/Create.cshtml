@@ -1,0 +1,12 @@
+@model RoomFormViewModel
+@{
+    ViewData["Title"] = "ოთახის დამატება";
+}
+<div class="col-md-6">
+    <h1 class="h3 mb-3">ოთახის დამატება</h1>
+    <form asp-action="Create" method="post">
+        <partial name="_RoomForm" model="Model" />
+        <button type="submit" class="btn btn-success">შენახვა</button>
+        <a asp-action="Index" class="btn btn-link">გაუქმება</a>
+    </form>
+</div>

@@ -1,0 +1,48 @@
+@model IReadOnlyList<Room>
+@{
+    ViewData["Title"] = "ოთახები";
+    var isAdmin = User.IsInRole(Roles.Admin);
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">სასწავლო ოთახები</h1>
+    @if (isAdmin)
+    {
+        <a class="btn btn-success" asp-action="Create">+ ოთახის დამატება</a>
+    }
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info" data-testid="empty-rooms">ოთახები ჯერ არ არის დამატებული.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+        @foreach (var room in Model)
+        {
+            <div class="col">
+                <div class="card h-100 @(room.IsActive ? "" : "border-secondary opacity-75")">
+                    <div class="card-body">
+                        <h2 class="h5 card-title">@room.Name</h2>
+                        <p class="card-text text-muted mb-1">📍 @room.Location</p>
+                        <p class="card-text">👥 ტევადობა: @room.Capacity</p>
+                        @if (!room.IsActive)
+                        {
+                            <span class="badge bg-secondary">არააქტიური</span>
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent d-flex gap-2">
+                        @if (room.IsActive)
+                        {
+                            <a class="btn btn-primary btn-sm" asp-action="Details" asp-route-id="@room.Id">განრიგი და დაჯავშნა</a>
+                        }
+                        @if (isAdmin)
+                        {
+                            <a class="btn btn-outline-secondary btn-sm" asp-action="Edit" asp-route-id="@room.Id">რედაქტირება</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}

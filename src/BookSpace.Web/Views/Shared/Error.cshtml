@@ -1,0 +1,10 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "შეცდომა";
+}
+<h1 class="text-danger">შეცდომა</h1>
+<p>მოთხოვნის დამუშავებისას მოხდა შეცდომა.</p>
+@if (Model.ShowRequestId)
+{
+    <p><strong>Request ID:</strong> <code>@Model.RequestId</code></p>
+}

@@ -1,0 +1,60 @@
+@model RoomDetailsViewModel
+@{
+    ViewData["Title"] = Model.Room.Name;
+    var date = Model.Schedule.Date;
+    var signedIn = User.Identity?.IsAuthenticated == true;
+}
+<a asp-action="Index" class="small">← ყველა ოთახი</a>
+<h1 class="h3 mt-2">@Model.Room.Name</h1>
+<p class="text-muted">📍 @Model.Room.Location · 👥 @Model.Room.Capacity</p>
+
+<form method="get" asp-action="Details" asp-route-id="@Model.Room.Id" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label for="date" class="form-label">თარიღი</label>
+        <input type="date" id="date" name="date" class="form-control"
+               value="@date.ToString("yyyy-MM-dd")"
+               min="@Model.MinDate.ToString("yyyy-MM-dd")"
+               max="@Model.MaxDate.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-outline-primary">ჩვენება</button>
+    </div>
+</form>
+
+@if (!Model.Schedule.HasFreeSlots)
+{
+    <div class="alert alert-warning" data-testid="no-free-slots">ამ დღეს თავისუფალი დრო აღარ არის.</div>
+}
+
+@if (!signedIn)
+{
+    <div class="alert alert-info">დასაჯავშნად <a asp-controller="Account" asp-action="Login" asp-route-returnUrl="@($"/Rooms/Details/{Model.Room.Id}?date={date:yyyy-MM-dd}")">შედით სისტემაში</a>.</div>
+}
+
+<div class="slot-grid">
+    @foreach (var slot in Model.Schedule.Slots)
+    {
+        var css = slot.State switch
+        {
+            SlotState.Free => "slot-free",
+            SlotState.Booked => "slot-booked",
+            _ => "slot-past"
+        };
+        <div class="slot @css">
+            <div class="fw-semibold">@slot.Label</div>
+            @if (slot.IsFree && signedIn)
+            {
+                <form asp-controller="Bookings" asp-action="Create" method="post">
+                    <input type="hidden" name="roomId" value="@Model.Room.Id" />
+                    <input type="hidden" name="date" value="@date.ToString("yyyy-MM-dd")" />
+                    <input type="hidden" name="startHour" value="@slot.StartHour" />
+                    <button type="submit" class="btn btn-success btn-sm mt-1">დაჯავშნა</button>
+                </form>
+            }
+            else
+            {
+                <div class="small">@(slot.State switch { SlotState.Free => "თავისუფალი", SlotState.Booked => "დაკავებული", _ => "გასული" })</div>
+            }
+        </div>
+    }
+</div>

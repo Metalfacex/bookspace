@@ -1,0 +1,63 @@
+@model MyBookings
+@{
+    ViewData["Title"] = "ჩემი ჯავშნები";
+}
+<h1 class="h3 mb-3">ჩემი ჯავშნები</h1>
+
+@if (Model.IsEmpty)
+{
+    <div class="alert alert-info" data-testid="no-bookings">ჯავშნები ჯერ არ გაქვთ. <a asp-controller="Rooms" asp-action="Index">აირჩიეთ ოთახი</a>.</div>
+}
+else
+{
+    <h2 class="h5">მომავალი</h2>
+    @if (Model.Upcoming.Count == 0)
+    {
+        <p class="text-muted">მომავალი ჯავშნები არ გაქვთ.</p>
+    }
+    else
+    {
+        <table class="table align-middle">
+            <thead><tr><th>თარიღი</th><th>დრო</th><th>ოთახი</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var b in Model.Upcoming)
+            {
+                <tr>
+                    <td>@b.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</td>
+                    <td>@(b.Room?.Name ?? $"#{b.RoomId}")</td>
+                    <td class="text-end">
+                        <form asp-action="Cancel" asp-route-id="@b.Id" method="post"
+                              onsubmit="return confirm('ნამდვილად გსურთ ჯავშნის გაუქმება?');">
+                            <button type="submit" class="btn btn-outline-danger btn-sm">გაუქმება</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+
+    <h2 class="h5 mt-4">ისტორია</h2>
+    @if (Model.History.Count == 0)
+    {
+        <p class="text-muted">ისტორია ცარიელია.</p>
+    }
+    else
+    {
+        <table class="table table-sm text-muted">
+            <thead><tr><th>თარიღი</th><th>დრო</th><th>ოთახი</th><th>სტატუსი</th></tr></thead>
+            <tbody>
+            @foreach (var b in Model.History)
+            {
+                <tr>
+                    <td>@b.Date.ToString("dd.MM.yyyy")</td>
+                    <td>@($"{b.StartHour:00}:00–{b.StartHour + 1:00}:00")</td>
+                    <td>@(b.Room?.Name ?? $"#{b.RoomId}")</td>
+                    <td>@(b.Status == BookingStatus.Cancelled ? "გაუქმებული" : "დასრულებული")</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    }
+}

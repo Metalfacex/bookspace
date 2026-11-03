@@ -1,0 +1,41 @@
+@model StatisticsViewModel
+@{
+    ViewData["Title"] = "სტატისტიკა";
+    var max = Model.Usage.Count == 0 ? 0 : Model.Usage.Max(u => u.BookingCount);
+}
+<h1 class="h3 mb-3">ოთახების გამოყენება</h1>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label class="form-label" for="from">დან</label>
+        <input type="date" id="from" name="from" class="form-control" value="@Model.From.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-auto">
+        <label class="form-label" for="to">მდე</label>
+        <input type="date" id="to" name="to" class="form-control" value="@Model.To.ToString("yyyy-MM-dd")" />
+    </div>
+    <div class="col-auto"><button type="submit" class="btn btn-outline-primary">ჩვენება</button></div>
+</form>
+
+@if (Model.Error is not null)
+{
+    <div class="alert alert-danger">@Model.Error</div>
+}
+else
+{
+    <p>სულ ჯავშნები პერიოდში: <strong>@Model.Total</strong></p>
+    <table class="table">
+        <thead><tr><th>ოთახი</th><th class="text-end">ჯავშნები</th><th style="width:40%"></th></tr></thead>
+        <tbody>
+        @foreach (var u in Model.Usage)
+        {
+            var pct = max == 0 ? 0 : (int)Math.Round(100.0 * u.BookingCount / max);
+            <tr>
+                <td>@u.RoomName</td>
+                <td class="text-end">@u.BookingCount</td>
+                <td><div class="progress" role="progressbar"><div class="progress-bar" style="width:@(pct)%"></div></div></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
