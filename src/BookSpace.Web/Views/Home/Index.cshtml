@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "მთავარი";
+}
+<div class="p-5 mb-4 bg-light rounded-3">
+    <h1 class="display-5 fw-bold">იპოვე თავისუფალი სასწავლო ოთახი</h1>
+    <p class="fs-5 col-md-8">BookSpace აჩვენებს უნივერსიტეტის სასწავლო ოთახების ხელმისაწვდომობას და გაძლევს საშუალებას, ოთახი წინასწარ დაჯავშნო — გადაფარვის გარეშე.</p>
+    <a class="btn btn-primary btn-lg" asp-controller="Rooms" asp-action="Index">ოთახების ნახვა</a>
+    @if (User.Identity?.IsAuthenticated != true)
+    {
+        <a class="btn btn-outline-primary btn-lg ms-2" asp-controller="Account" asp-action="Register">რეგისტრაცია</a>
+    }
+</div>

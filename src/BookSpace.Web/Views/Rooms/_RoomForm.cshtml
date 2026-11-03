@@ -1,0 +1,15 @@
+@model RoomFormViewModel
+<div asp-validation-summary="All" class="text-danger mb-2"></div>
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Location" class="form-label"></label>
+    <input asp-for="Location" class="form-control" />
+</div>
+<div class="mb-3">
+    <label asp-for="Capacity" class="form-label"></label>
+    <input asp-for="Capacity" class="form-control" type="number" min="1" max="100" />
+    <div class="form-text">1-დან 100-მდე.</div>
+</div>

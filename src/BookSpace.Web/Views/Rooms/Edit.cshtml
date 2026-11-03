@@ -1,0 +1,17 @@
+@model RoomFormViewModel
+@{
+    ViewData["Title"] = "ოთახის რედაქტირება";
+}
+<div class="col-md-6">
+    <h1 class="h3 mb-3">ოთახის რედაქტირება</h1>
+    <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+        <input type="hidden" asp-for="Id" />
+        <partial name="_RoomForm" model="Model" />
+        <div class="form-check mb-3">
+            <input asp-for="IsActive" class="form-check-input" />
+            <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+        <button type="submit" class="btn btn-primary">შენახვა</button>
+        <a asp-action="Index" class="btn btn-link">გაუქმება</a>
+    </form>
+</div>
