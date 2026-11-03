@@ -11,15 +11,15 @@ dotnet tool install -g dotnet-reportgenerator-globaltool
 reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:coverage-report -reporttypes:Html
 ```
 
-## შედეგი (CI run #1, 2026-11-03)
+## შედეგი (main, PR #17-ის შემდეგ, 2026-11-03)
 
-ტესტები: **85 unit + 9 integration = 94, ყველა გადის** (integration — MS SQL Server 2022 კონტეინერზე).
+ტესტები: **85 unit + 14 integration = 99, ყველა გადის** (integration — MS SQL Server 2022 კონტეინერზე).
 
-| მეტრიკა | მნიშვნელობა |
-|---|---|
-| Line coverage | **78.4%** (389 / 496) |
-| Branch coverage | **75%** (126 / 168) |
-| Method coverage | **82.8%** (92 / 111) |
+| მეტრიკა | პირველი ანგარიში | ახლა |
+|---|---:|---:|
+| Line coverage | 78.4% | **84.8%** (421 / 496) |
+| Branch coverage | 75% | **79.7%** (134 / 168) |
+| Method coverage | 82.8% | **84.6%** (94 / 111) |
 
 | Assembly / კლასი | Line coverage |
 |---|---:|
@@ -29,31 +29,36 @@ reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:cove
 | `Services.AuthService` | 94.1% |
 | `Validation.RoomValidator` | 91.6% |
 | `Services.RoomService` | 88.8% |
-| **BookSpace.Infrastructure** | **48.9%** |
-| `Data.BookSpaceDbContext` | 100% |
+| **BookSpace.Infrastructure** | **65.6%** (იყო 48.9%) |
+| `Data.BookSpaceDbContext`, `Data.DbInitializer` | 100% |
 | `Repositories.BookingRepository` | 96.2% |
 | `Repositories.UserRepository` | 92.3% |
-| `Repositories.RoomRepository` | 53.3% |
 | `Data.DbErrors` | 66.6% |
-| `Data.DbInitializer`, `DependencyInjection`, `SystemClock`, `IdentityPasswordHasher`, `LoggingEmailSender` | **0%** |
+| `Repositories.RoomRepository` | 53.3% |
+| `IdentityPasswordHasher`, `SystemClock`, `LoggingEmailSender`, `DependencyInjection` | **0%** |
 
 `BookSpace.Web` (კონტროლერები, Views) ტესტ-პროექტებიდან არ არის რეფერენსირებული, ამიტომ ანგარიშში საერთოდ არ ჩანს — ესეც დაუფარავი ფენაა.
 
-## ერთი უტესტო ადგილი: `DbInitializer` (0%)
+### ისტორია: `DbInitializer` 0% → 100%
 
-**ფაილი:** `src/BookSpace.Infrastructure/Data/DbInitializer.cs`
+პირველ ანგარიშში უტესტო ადგილად `DbInitializer` შევარჩიე. ის დაიფარა [PR #17](https://github.com/Metalfacex/bookspace/pull/17)-ით (5 integration-ტესტი: idempotency, ცარიელი პაროლი, ელფოსტის ნორმალიზაცია, Admin/Manager როლები, არსებული ოთახები). PR-მა code review გაიარა (იხ. `code-review.md`), review-ში აღმოჩენილი ერთდროული სტარტის პრობლემა გადავიდა Issue [#18](https://github.com/Metalfacex/bookspace/issues/18)-ში.
 
-**რას აკეთებს:** აპლიკაციის გაშვებისას ქმნის სქემას (`EnsureCreated`), ამატებს ადმინისტრატორისა და მენეჯერის ანგარიშებს კონფიგურაციიდან და საწყის ოთახებს, თუ ცხრილი ცარიელია.
+## ერთი უტესტო ადგილი: `IdentityPasswordHasher` (0%)
 
-**რატომ არის სარისკო, რომ უტესტოა:**
+**ფაილი:** `src/BookSpace.Infrastructure/Services/IdentityPasswordHasher.cs`
 
-- თუ `EnsureUserAsync` ელფოსტას არ ანორმალიზებს ან ხელმეორე გაშვებაზე იმავე ადმინს ისევ დაამატებს, unique index-ის გამო **აპლიკაცია საერთოდ ვერ ჩაირთვება** — და ამას მხოლოდ deploy-ის დროს დავინახავდით.
-- ცარიელი `AdminPassword` (პროდაქშენის `appsettings.json`) უნდა ნიშნავდეს „არ შექმნა“, და არა „შექმენი ცარიელი პაროლით“ — ეს ქცევა დოკუმენტირებულია მხოლოდ კოდში.
+**რას აკეთებს:** პაროლს ჰეშავს (ASP.NET Identity, PBKDF2) და შესვლისას ამოწმებს. unit-ტესტები ამას ფეიკ-ჰეშერით (`FakePasswordHasher`) ცვლიან, integration-ტესტები — `PlainTextHasher`-ით, ამიტომ რეალური ჰეშერი არცერთ ტესტში არ ეშვება.
 
-**როგორ დაიფარება (შემდეგი ნაბიჯი):** integration-ტესტი `TestDatabase`-ზე —
+**რატომ არის სარისკო:**
 
-1. `InitializeBookSpaceDatabaseAsync` ორჯერ ზედიზედ → `Users`-ში ზუსტად 1 ადმინი, `Rooms`-ში 4 ოთახი (idempotency).
-2. ცარიელი `AdminPassword` → ადმინი არ იქმნება.
-3. `Admin@X.edu.ge` კონფიგურაციაში → ბაზაში `admin@x.edu.ge` (ნორმალიზაცია).
+- ეს უსაფრთხოების კოდია: თუ `Verify` შეცდომით `true`-ს დააბრუნებს ნებისმიერ პაროლზე, ნებისმიერ ანგარიშში შესვლა გახდება შესაძლებელი — და ყველა არსებული ტესტი მაინც მწვანე დარჩება.
+- `Verify` იჭერს `FormatException`-ს (დაზიანებული ჰეში ბაზაში) და აბრუნებს `false`-ს; ეს ქცევა დოკუმენტირებულია მხოლოდ კოდში.
+- `PasswordVerificationResult.SuccessRehashNeeded` (ძველი ფორმატის ჰეში) ახლა `true`-დ ითვლება, მაგრამ ჰეში არ ახლდება.
+
+**როგორ დაიფარება (შემდეგი ნაბიჯი):** unit-ტესტები `IdentityPasswordHasher`-ზე —
+
+1. `Hash("Password1")` → შედეგი არ უდრის ღია პაროლს და ორი ჰეში ერთნაირი პაროლისთვისაც განსხვავდება (salt).
+2. `Verify(hash, "Password1")` → `true`; `Verify(hash, "Password2")` → `false`.
+3. `Verify("not-a-hash", "x")` და `Verify("", "x")` → `false` (exception-ის გარეშე).
 
 მეორე პრიორიტეტი — `RoomsController`/`BookingsController`-ის HTTP-დონის ტესტები `WebApplicationFactory`-ით (ავტორიზაცია: სტუდენტი `/Rooms/Create`-ზე უნდა მიიღოს 403).
