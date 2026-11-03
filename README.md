@@ -6,12 +6,12 @@
 
 | | |
 |---|---|
-| 📋 Product Backlog (GitHub Projects) | [github.com/users/Metalfacex/projects/5](https://github.com/users/Metalfacex/projects/5) |
-| 🏛️ არქიტექტურა (პრაქტიკული 2) | [docs/architecture.md](docs/architecture.md) |
-| 🧪 ტესტ-სცენარები (პრაქტიკული 3) | [docs/testing/test-scenarios.md](docs/testing/test-scenarios.md) |
-| 🔁 TDD ციკლი | [docs/testing/tdd-cycle.md](docs/testing/tdd-cycle.md) |
-| 📊 Coverage ანგარიში | [docs/testing/coverage.md](docs/testing/coverage.md) |
-| 👀 Code Review | [docs/testing/code-review.md](docs/testing/code-review.md) |
+| Product Backlog (GitHub Projects) | [github.com/users/Metalfacex/projects/5](https://github.com/users/Metalfacex/projects/5) |
+| არქიტექტურა (პრაქტიკული 2) | [docs/architecture.md](docs/architecture.md) |
+| ტესტ-სცენარები (პრაქტიკული 3) | [docs/testing/test-scenarios.md](docs/testing/test-scenarios.md) |
+| TDD ციკლი | [docs/testing/tdd-cycle.md](docs/testing/tdd-cycle.md) |
+| Coverage ანგარიში | [docs/testing/coverage.md](docs/testing/coverage.md) |
+| Code Review | [docs/testing/code-review.md](docs/testing/code-review.md) |
 
 ## გაშვება
 
