@@ -4,6 +4,7 @@ namespace BookSpace.Core.Rules;
 
 /// <summary>
 /// ამოწმებს სტუდენტის დღიურ ლიმიტს: ერთ დღეში მაქსიმუმ N აქტიური ჯავშანი.
+/// დაიწერა TDD ციკლით (იხ. docs/testing/tdd-cycle.md).
 /// </summary>
 public class DailyLimitPolicy
 {
@@ -21,23 +22,9 @@ public class DailyLimitPolicy
 
     public int RemainingFor(IEnumerable<Booking> userBookings, DateOnly date)
     {
-        var count = 0;
-        foreach (var b in userBookings)
-        {
-            if (b.Status == BookingStatus.Active && b.Date == date) count++;
-        }
-
-        return MaxPerDay - count < 0 ? 0 : MaxPerDay - count;
+        var used = userBookings.Count(b => b.IsActive && b.Date == date);
+        return Math.Max(0, MaxPerDay - used);
     }
 
-    public bool CanBook(IEnumerable<Booking> userBookings, DateOnly date)
-    {
-        var count = 0;
-        foreach (var b in userBookings)
-        {
-            if (b.Status == BookingStatus.Active && b.Date == date) count++;
-        }
-
-        return count < MaxPerDay;
-    }
+    public bool CanBook(IEnumerable<Booking> userBookings, DateOnly date) => RemainingFor(userBookings, date) > 0;
 }
