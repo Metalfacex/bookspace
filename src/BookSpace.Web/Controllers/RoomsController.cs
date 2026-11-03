@@ -63,8 +63,15 @@ public class RoomsController : Controller
         var today = _clock.Today;
         var maxDate = today.AddDays(_rules.MaxDaysAhead);
         var selected = date ?? today;
-        if (selected < today) selected = today;
-        if (selected > maxDate) selected = maxDate;
+        if (selected < today)
+        {
+            selected = today;
+        }
+
+        if (selected > maxDate)
+        {
+            selected = maxDate;
+        }
 
         var schedule = await _availability.GetScheduleAsync(id, selected, ct);
         if (!schedule.IsSuccess)

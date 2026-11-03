@@ -1,0 +1,56 @@
+# BookSpace — კოდის სტილის წესები (dotnet format + IDE + build analyzers)
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,csproj,props,xml}]
+indent_size = 2
+
+[*.md]
+trim_trailing_whitespace = false
+
+[*.cs]
+# using-ები
+dotnet_sort_system_directives_first = true
+dotnet_separate_import_directive_groups = false
+
+# ფრჩხილები და ბლოკები
+csharp_new_line_before_open_brace = all
+csharp_prefer_braces = true:warning
+csharp_style_namespace_declarations = file_scoped:warning
+
+# var და გამოსახულებები
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+
+# დასახელება: private static readonly / const → PascalCase, სხვა private ველები → _camelCase
+dotnet_naming_rule.private_static_readonly_pascal.symbols = private_static_readonly
+dotnet_naming_rule.private_static_readonly_pascal.style = pascal
+dotnet_naming_rule.private_static_readonly_pascal.severity = warning
+dotnet_naming_symbols.private_static_readonly.applicable_kinds = field
+dotnet_naming_symbols.private_static_readonly.applicable_accessibilities = private
+dotnet_naming_symbols.private_static_readonly.required_modifiers = static, readonly
+dotnet_naming_rule.private_const_pascal.symbols = private_const
+dotnet_naming_rule.private_const_pascal.style = pascal
+dotnet_naming_rule.private_const_pascal.severity = warning
+dotnet_naming_symbols.private_const.applicable_kinds = field
+dotnet_naming_symbols.private_const.applicable_accessibilities = private
+dotnet_naming_symbols.private_const.required_modifiers = const
+dotnet_naming_style.pascal.capitalization = pascal_case
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+
+# არასაჭირო using
+dotnet_diagnostic.IDE0005.severity = warning

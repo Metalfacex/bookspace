@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BookSpace.Web.Controllers.Api;
 
-[Route("api/rooms")]
+/// <summary>ოთახები და მათი თავისუფალი დროები.</summary>
+[Route("api/v1/rooms")]
 public class RoomsApiController : ApiControllerBase
 {
     private readonly RoomService _rooms;
@@ -16,13 +17,22 @@ public class RoomsApiController : ApiControllerBase
         _availability = availability;
     }
 
-    /// <summary>GET /api/rooms — აქტიური ოთახების სია (US-03).</summary>
+    /// <summary>აქტიური ოთახების სია (US-03). ავტორიზაცია არ სჭირდება.</summary>
+    /// <response code="200">ოთახების სია (შეიძლება ცარიელი იყოს).</response>
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<RoomDto>), StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<RoomDto>>> GetRooms(CancellationToken ct) =>
         Ok((await _rooms.GetActiveRoomsAsync(ct)).Select(RoomDto.From));
 
-    /// <summary>GET /api/rooms/{id}/availability?date=2026-11-10 — სლოტები (US-04).</summary>
+    /// <summary>ოთახის საათობრივი სლოტები არჩეულ დღეს (US-04).</summary>
+    /// <param name="id">ოთახის id.</param>
+    /// <param name="date">თარიღი ფორმატით yyyy-MM-dd, მაგ. 2026-11-11.</param>
+    /// <param name="ct">გაუქმების ტოკენი.</param>
+    /// <response code="200">სლოტები: Free / Booked / Past.</response>
+    /// <response code="404">ოთახი ვერ მოიძებნა ან დახურულია.</response>
     [HttpGet("{id:int}/availability")]
+    [ProducesResponseType(typeof(AvailabilityDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ErrorDto), StatusCodes.Status404NotFound)]
     public async Task<ActionResult<AvailabilityDto>> GetAvailability(int id, [FromQuery] DateOnly date,
         CancellationToken ct)
     {

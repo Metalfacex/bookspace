@@ -1,12 +1,17 @@
 using BookSpace.Core.Common;
+using BookSpace.Web.Configuration;
 using BookSpace.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 
 namespace BookSpace.Web.Controllers.Api;
 
+/// <summary>REST API-ს საერთო ბაზა: JSON, rate limiting, ბიზნეს-შეცდომის HTTP სტატუსზე ასახვა.</summary>
 [ApiController]
 [IgnoreAntiforgeryToken]
+[EnableRateLimiting(ApiRateLimitOptions.PolicyName)]
 [Produces("application/json")]
+[ProducesResponseType(typeof(ErrorDto), StatusCodes.Status429TooManyRequests)]
 public abstract class ApiControllerBase : ControllerBase
 {
     protected ActionResult ErrorResult(Result result)
