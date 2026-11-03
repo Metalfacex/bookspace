@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      mssql:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        env:
+          ACCEPT_EULA: "Y"
+          MSSQL_SA_PASSWORD: "BookSpace_Test_2026!"
+        ports:
+          - 1433:1433
+
+    env:
+      # Integration ტესტები რეალურ MS SQL Server-ზე ეშვება (იხ. tests/BookSpace.IntegrationTests/TestDatabase.cs)
+      BOOKSPACE_TEST_SQLSERVER: "Server=localhost,1433;User Id=sa;Password=BookSpace_Test_2026!;TrustServerCertificate=True;Encrypt=False"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore
+        run: dotnet restore BookSpace.sln
+
+      - name: Build
+        run: dotnet build BookSpace.sln --no-restore -c Release
+
+      - name: Wait for SQL Server
+        run: |
+          for i in $(seq 1 30); do
+            (echo > /dev/tcp/localhost/1433) >/dev/null 2>&1 && break
+            sleep 2
+          done
+          sleep 10
+
+      - name: Test (unit + integration) with coverage
+        run: >
+          dotnet test BookSpace.sln --no-build -c Release
+          --logger "console;verbosity=normal"
+          --logger "trx"
+          --collect:"XPlat Code Coverage"
+          --results-directory ./TestResults
+
+      - name: Coverage report
+        if: always()
+        run: |
+          dotnet tool install -g dotnet-reportgenerator-globaltool
+          reportgenerator -reports:"TestResults/**/coverage.cobertura.xml" -targetdir:coverage-report -reporttypes:"Html;TextSummary;MarkdownSummaryGithub"
+          cat coverage-report/Summary.txt
+          cat coverage-report/SummaryGithub.md >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: |
+            coverage-report
+            TestResults/**/*.trx
