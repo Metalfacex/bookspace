@@ -171,3 +171,5 @@ US-12-ის დაშლა პატარა Story-ებად. ამ რ�
 | US-12.3 | სერიის ნახვა „ჩემს ჯავშნებში“ | Won't have | 2 | [#15](https://github.com/Metalfacex/bookspace/issues/15) |
 | US-12.4 | სერიის ან ერთი შემთხვევის გაუქმება | Won't have | 3 | [#16](https://github.com/Metalfacex/bookspace/issues/16) |
 | | **ჯამი** | | **13** | |
+
+_ბოლო განახლება: 2026-11-17_
